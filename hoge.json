@@ -1,0 +1,137 @@
+{
+  "ApiAdminCommentPostId_DELETE": {
+    "query": {
+      "id": 0
+    }
+  },
+  "ApiAdminPostId_DELETE": {
+    "query": {
+      "id": 0
+    }
+  },
+  "ApiAdminProfileScreenName_DELETE": {
+    "query": {
+      "screenName": "dummy"
+    }
+  },
+  "ApiAdminProfileScreenName_GET": {
+    "query": {
+      "screenName": "dummy"
+    }
+  },
+  "ApiAdminProfileScreenName_PUT": {
+    "body": {
+      "comment": "dummy",
+      "password": "dummy",
+      "privateComment": "dummy",
+      "role": "",
+      "screenName": "dummy"
+    },
+    "query": {
+      "screenName": "dummy"
+    }
+  },
+  "ApiAuthLogin_POST": {
+    "body": {
+      "password": "dummy",
+      "screenName": "dummy"
+    }
+  },
+  "ApiAuthSignup_POST": {
+    "body": {
+      "password": "dummy",
+      "screenName": "dummy",
+      "userName": "dummy"
+    }
+  },
+  "ApiCommentPostId_DELETE": {
+    "query": {
+      "id": 0
+    }
+  },
+  "ApiCommentPostId_GET": {
+    "query": {
+      "id": 0
+    }
+  },
+  "ApiCommentPostId_PATCH": {
+    "body": {
+      "text": "dummy"
+    },
+    "query": {
+      "id": 0
+    }
+  },
+  "ApiCommentPostId_POST": {
+    "body": {
+      "text": "dummy"
+    },
+    "query": {
+      "id": 0
+    }
+  },
+  "ApiLikePostId_DELETE": {
+    "query": {
+      "id": 0
+    }
+  },
+  "ApiLikePostId_GET": {
+    "query": {
+      "id": 0
+    }
+  },
+  "ApiLikePostId_POST": {
+    "query": {
+      "id": 0
+    }
+  },
+  "ApiPostId_DELETE": {
+    "query": {
+      "id": 0
+    }
+  },
+  "ApiPostId_GET": {
+    "query": {
+      "id": 0
+    }
+  },
+  "ApiPostId_PATCH": {
+    "body": {
+      "body": "dummy",
+      "title": "dummy"
+    },
+    "query": {
+      "id": 0
+    }
+  },
+  "ApiPostNew_POST": {
+    "body": {
+      "body": "dummy",
+      "title": "dummy"
+    }
+  },
+  "ApiProfileMePassword_PUT": {
+    "body": {
+      "currentpassword": "dummy",
+      "newpassword": "dummy"
+    }
+  },
+  "ApiProfileMe_DELETE": {
+    "body": {
+      "password": "dummy"
+    }
+  },
+  "ApiProfileMe_PUT": {
+    "body": {
+      "comment": "dummy",
+      "privateComment": "dummy",
+      "screenName": "dummy",
+      "userName": "dummy"
+    }
+  },
+  "ApiProfileScreenName_GET": {
+    "query": {
+      "screenName": "dummy"
+    }
+  }
+}
