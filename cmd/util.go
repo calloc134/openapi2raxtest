@@ -299,7 +299,7 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 				}
 
 				// ステップ構造体を生成してraxtest構造体内の配列の末尾に追加
-				rootRaxSpec.Init = append(rootRaxSpec.Init, stepRaxSpec{
+				rootRaxSpec.Steps = append(rootRaxSpec.Steps, stepRaxSpec{
 					// 名前
 					Name: step_name,
 					// メソッド名
@@ -323,7 +323,7 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 				}
 
 				// ステップ構造体を生成してraxtest構造体内の配列の末尾に追加
-				rootRaxSpec.Init = append(rootRaxSpec.Init, stepRaxSpec{
+				rootRaxSpec.Steps = append(rootRaxSpec.Steps, stepRaxSpec{
 					// 名前
 					Name: step_name,
 					// メソッド名
@@ -345,7 +345,7 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 				}
 
 				// ステップ構造体を生成してraxtest構造体内の配列の末尾に追加
-				rootRaxSpec.Init = append(rootRaxSpec.Init, stepRaxSpec{
+				rootRaxSpec.Steps = append(rootRaxSpec.Steps, stepRaxSpec{
 					// 名前
 					Name: step_name,
 					// メソッド名
