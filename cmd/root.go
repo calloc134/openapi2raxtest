@@ -31,27 +31,28 @@ and placing data in JSON files in the same directory as the scenarios. By increa
 		// OpenAPIのYAMLファイルを読み込みしてオブジェクトを生成
 		flags := *cmd.Flags()
 
-		// フラグから入力ファイル名を取得
+		// フラグからOpenAPIスキーマの入力ファイル名を取得
 		input, err := flags.GetString("input")
 		if err != nil {
 			fmt.Println(err)
 			input = "openapi.yml"
 		}
 
-		// フラグから出力ディレクトリ名を取得
+		// フラグからymlの出力先パスを取得
 		output_path, err := flags.GetString("output")
 		if err != nil {
 			fmt.Println(err)
 			output_path = "index.yml"
 		}
 
+		// フラグからデータを格納するjsonの出力先パスを取得
 		data_path, err := flags.GetString("data")
 		if err != nil {
 			fmt.Println(err)
 			data_path = "json://data.json"
 		}
 
-		// フラグから出力ディレクトリ名を取得
+		// フラグからアクセスするサーバのホストを取得
 		host, err := flags.GetString("server")
 		if err != nil {
 			fmt.Println(err)
