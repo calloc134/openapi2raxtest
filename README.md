@@ -35,4 +35,4 @@ json形式として、raxtestのテストデータが出力される
 また、バグを発見した場合は、PRを送っていただけると幸いです。
 
 ## 姉妹プロジェクト
- - [openapi2runn](https://github.com/calloc134/openapi2runn)
+ - [openapi2runn](https://github.com/calloc134/openapi2runn) : OpenAPI定義からrunn構成ファイルを生成するユーティリティ
