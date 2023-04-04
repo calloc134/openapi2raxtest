@@ -56,6 +56,13 @@ _____  _____  _____  _____  _____  _____  ___  _____  _____  __ __  _____  _____
 			host = "http://localhost:8080"
 		}
 
+		println("[*] input file name: " + input)
+		println("[*] output file name: " + output_path)
+		println("[*] data file name: " + data_path)
+		println("[*] host server host: " + host)
+
+		println("[*] Reading OpenAPI file...")
+
 		// OpenAPIのYAMLファイルを読み込みしてオブジェクトを生成
 		pathSpecs, loginSpec, _, err := genItem(input)
 		if err != nil {
@@ -63,6 +70,7 @@ _____  _____  _____  _____  _____  _____  ___  _____  _____  __ __  _____  _____
 			return
 		}
 
+		println("[*] Generating test raxtest config files...")
 		// raxtest構造体を生成
 		rootRaxSpec, dataRaxSpec, err := genRaxtestStruct(&host, &data_path, pathSpecs, loginSpec)
 
@@ -71,12 +79,15 @@ _____  _____  _____  _____  _____  _____  ___  _____  _____  __ __  _____  _____
 			return
 		}
 
+		println("[*] Rendering raxtest config files...")
 		// raxtest構造体をyamlファイル、jsonファイルにしてそれぞれ出力
 		err = renderRaxTestStruct(&output_path, &data_path, rootRaxSpec, dataRaxSpec)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
+
+		println("[#] Done! Please check the output files.")
 
 	},
 }
