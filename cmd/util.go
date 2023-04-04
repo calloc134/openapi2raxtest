@@ -176,7 +176,7 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 	// 使う構造体を定義。処理後は返り値として返す
 	rootRaxSpec := rootRaxSpec{
 		BaseUrl: *base_url,
-		Data:    *data_path,
+		Data:    "json://" + *data_path,
 		Init:    []stepRaxSpec{},
 		Steps:   []stepRaxSpec{},
 	}
