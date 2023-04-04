@@ -30,9 +30,10 @@ yaml形式として、raxtestスキーマが出力される
 json形式として、raxtestのテストデータが出力される
  - `-s` : サーバのホスト
 
-## 注意事項
+## 注意事項 / caution
 このプログラムは現在開発中のため、バグが含まれている可能性があります。  
 また、バグを発見した場合は、PRを送っていただけると幸いです。
 
-## 姉妹プロジェクト
+## 姉妹プロジェクト / sister projects
+ - [raxtest](https://github.com/calloc134/raxtest) : 高速に動作するAPIのテストツール
  - [openapi2runn](https://github.com/calloc134/openapi2runn) : OpenAPI定義からrunn構成ファイルを生成するユーティリティ
