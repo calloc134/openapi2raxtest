@@ -214,6 +214,8 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 					Body: step_name,
 					// クエリパラメータ
 					Query: step_name,
+					// 予期しているステータスコード
+					ExpectStatus: 200,
 				})
 
 				// ボディだけある場合
@@ -234,6 +236,8 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 					Path: loginSpec.path,
 					// ボディパラメータ
 					Body: step_name,
+					// 予期しているステータスコード
+					ExpectStatus: 200,
 				})
 
 				// クエリだけある場合
@@ -254,6 +258,8 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 					Path: loginSpec.path,
 					// クエリパラメータ
 					Query: step_name,
+					// 予期しているステータスコード
+					ExpectStatus: 200,
 				})
 
 				// クエリとボディが両方ない場合
@@ -267,6 +273,8 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 					Method: method_item.method,
 					// パス
 					Path: loginSpec.path,
+					// 予期しているステータスコード
+					ExpectStatus: 200,
 				})
 			}
 		}
@@ -302,6 +310,8 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 					Body: step_name,
 					// クエリパラメータ
 					Query: step_name,
+					// 予期しているステータスコード
+					ExpectStatus: 200,
 				})
 
 				// ボディだけある場合
@@ -322,6 +332,8 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 					Path: pathSpec.path,
 					// ボディパラメータ
 					Body: step_name,
+					// 予期しているステータスコード
+					ExpectStatus: 200,
 				})
 
 				// クエリだけある場合
@@ -342,6 +354,8 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 					Path: pathSpec.path,
 					// クエリパラメータ
 					Query: step_name,
+					// 予期しているステータスコード
+					ExpectStatus: 200,
 				})
 
 				// クエリとボディが両方ない場合
@@ -355,6 +369,8 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 					Method: method_item.method,
 					// パス
 					Path: pathSpec.path,
+					// 予期しているステータスコード
+					ExpectStatus: 200,
 				})
 			}
 		}
