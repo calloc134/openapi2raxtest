@@ -1,4 +1,4 @@
-module openapi2raxtest
+module github.com/calloc134/openapi2raxtest
 
 go 1.19
 

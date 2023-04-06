@@ -13,7 +13,7 @@
 
 ## インストール
 ```bash
-$ go get -u github.com/calloc134/openapi2raxtest
+$ go install github.com/calloc134/openapi2raxtest@latest
 ```
 
 ## 使い方
