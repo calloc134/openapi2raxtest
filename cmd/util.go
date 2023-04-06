@@ -175,14 +175,19 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 
 	// 使う構造体を定義。処理後は返り値として返す
 	rootRaxSpec := rootRaxSpec{
-		BaseUrl: *base_url,
-		Data:    "json://" + *data_path,
-		Init:    []stepRaxSpec{},
-		Steps:   []stepRaxSpec{},
+		BaseUrl:        *base_url,
+		Data:           "json://" + *data_path,
+		Init:           []stepRaxSpec{},
+		StepCategories: map[string]categoryRaxSpec{},
 	}
 
 	// JSONになるデータ構造体の連想配列を定義
 	dataRaxSpecs := make(map[string]dataRaxSpec)
+
+	rootRaxSpec.Init = append(rootRaxSpec.Init, stepRaxSpec{
+		Name: "no_login",
+	})
+
 	// 引数で受け取ったopenapi構造体を読み込み
 
 	// まずはログイン用のステップをinitとして処理
@@ -214,8 +219,6 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 					Body: step_name,
 					// クエリパラメータ
 					Query: step_name,
-					// 予期しているステータスコード
-					ExpectStatus: 200,
 				})
 
 				// ボディだけある場合
@@ -236,8 +239,6 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 					Path: loginSpec.path,
 					// ボディパラメータ
 					Body: step_name,
-					// 予期しているステータスコード
-					ExpectStatus: 200,
 				})
 
 				// クエリだけある場合
@@ -258,8 +259,6 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 					Path: loginSpec.path,
 					// クエリパラメータ
 					Query: step_name,
-					// 予期しているステータスコード
-					ExpectStatus: 200,
 				})
 
 				// クエリとボディが両方ない場合
@@ -273,108 +272,137 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 					Method: method_item.method,
 					// パス
 					Path: loginSpec.path,
-					// 予期しているステータスコード
-					ExpectStatus: 200,
 				})
 			}
 		}
 
 	}
 
-	// 次に通常のステップを処理
-	for _, pathSpec := range *pathSpecs {
-		// メソッド毎に処理
-		for _, method_item := range pathSpec.methods {
+	// ログイン処理ステップの要素数だけループ
+	for _, init := range rootRaxSpec.Init {
 
-			// ステップ名を生成
-			step_name := pathSpec.name + "_" + method_item.method
+		var login_name string
 
-			// クエリとボディが両方ある場合
-			if method_item.bodies != nil && method_item.queries != nil {
-
-				// データ構造体の連想配列にステップ名をキーにしてクエリとボディのデータを格納
-				dataRaxSpecs[step_name] = dataRaxSpec{
-					Bodies:  genJson(&method_item.bodies),
-					Queries: genJson(&method_item.queries),
-				}
-
-				// ステップ構造体を生成してraxtest構造体内の配列の末尾に追加
-				rootRaxSpec.Steps = append(rootRaxSpec.Steps, stepRaxSpec{
-					// 名前
-					Name: step_name,
-					// メソッド名
-					Method: method_item.method,
-					// パス
-					Path: pathSpec.path,
-					// ボディパラメータ
-					Body: step_name,
-					// クエリパラメータ
-					Query: step_name,
-					// 予期しているステータスコード
-					ExpectStatus: 200,
-				})
-
-				// ボディだけある場合
-			} else if method_item.bodies != nil {
-
-				// データ構造体の連想配列にステップ名をキーにしてボディのデータを格納
-				dataRaxSpecs[step_name] = dataRaxSpec{
-					Bodies: genJson(&method_item.bodies),
-				}
-
-				// ステップ構造体を生成してraxtest構造体内の配列の末尾に追加
-				rootRaxSpec.Steps = append(rootRaxSpec.Steps, stepRaxSpec{
-					// 名前
-					Name: step_name,
-					// メソッド名
-					Method: method_item.method,
-					// パス
-					Path: pathSpec.path,
-					// ボディパラメータ
-					Body: step_name,
-					// 予期しているステータスコード
-					ExpectStatus: 200,
-				})
-
-				// クエリだけある場合
-			} else if method_item.queries != nil {
-
-				// データ構造体の連想配列にステップ名をキーにしてクエリのデータを格納
-				dataRaxSpecs[step_name] = dataRaxSpec{
-					Queries: genJson(&method_item.queries),
-				}
-
-				// ステップ構造体を生成してraxtest構造体内の配列の末尾に追加
-				rootRaxSpec.Steps = append(rootRaxSpec.Steps, stepRaxSpec{
-					// 名前
-					Name: step_name,
-					// メソッド名
-					Method: method_item.method,
-					// パス
-					Path: pathSpec.path,
-					// クエリパラメータ
-					Query: step_name,
-					// 予期しているステータスコード
-					ExpectStatus: 200,
-				})
-
-				// クエリとボディが両方ない場合
-			} else {
-
-				// ステップ構造体を生成してraxtest構造体内の配列の末尾に追加
-				rootRaxSpec.Steps = append(rootRaxSpec.Steps, stepRaxSpec{
-					// 名前
-					Name: step_name,
-					// メソッド名
-					Method: method_item.method,
-					// パス
-					Path: pathSpec.path,
-					// 予期しているステータスコード
-					ExpectStatus: 200,
-				})
-			}
+		if init.Name == "no_login" {
+			login_name = ""
+		} else {
+			login_name = init.Name
 		}
 
+		rootRaxSpec.StepCategories[init.Name] = categoryRaxSpec{
+			Login: login_name,
+			Steps: &[]stepRaxSpec{},
+		}
+
+		// 次に通常のステップを処理
+		for _, pathSpec := range *pathSpecs {
+			// メソッド毎に処理
+			for _, method_item := range pathSpec.methods {
+				// ステップ名を生成
+				step_name := pathSpec.name + "_" + method_item.method
+
+				var expect_status int
+				if login_name == "" {
+					expect_status = 401
+				} else {
+					expect_status = 200
+				}
+
+				// クエリとボディが両方ある場合
+				if method_item.bodies != nil && method_item.queries != nil {
+
+					// データ構造体の連想配列にステップ名をキーにしてクエリとボディのデータを格納
+					dataRaxSpecs[step_name] = dataRaxSpec{
+						Bodies:  genJson(&method_item.bodies),
+						Queries: genJson(&method_item.queries),
+					}
+
+					// ステップ構造体を生成してraxtest構造体内の配列の末尾に追加
+					*rootRaxSpec.StepCategories[init.Name].Steps = append(*rootRaxSpec.StepCategories[init.Name].Steps, stepRaxSpec{
+						// 名前
+						Name: step_name,
+						// メソッド名
+						Method: method_item.method,
+						// パス
+						Path: pathSpec.path,
+						// ボディパラメータ
+						Body: step_name,
+						// クエリパラメータ
+						Query: step_name,
+						// 予期しているステータスコード
+						ExpectStatus: expect_status,
+					})
+
+					// ボディだけある場合
+				} else if method_item.bodies != nil {
+
+					// データ構造体の連想配列にステップ名をキーにしてボディのデータを格納
+					dataRaxSpecs[step_name] = dataRaxSpec{
+						Bodies: genJson(&method_item.bodies),
+					}
+
+					// ステップ構造体を生成してraxtest構造体内の配列の末尾に追加
+					*rootRaxSpec.StepCategories[init.Name].Steps = append(*rootRaxSpec.StepCategories[init.Name].Steps, stepRaxSpec{
+						// 名前
+						Name: step_name,
+						// メソッド名
+						Method: method_item.method,
+						// パス
+						Path: pathSpec.path,
+						// ボディパラメータ
+						Body: step_name,
+						// 予期しているステータスコード
+						ExpectStatus: expect_status,
+					})
+
+					// クエリだけある場合
+				} else if method_item.queries != nil {
+
+					// データ構造体の連想配列にステップ名をキーにしてクエリのデータを格納
+					dataRaxSpecs[step_name] = dataRaxSpec{
+						Queries: genJson(&method_item.queries),
+					}
+
+					// ステップ構造体を生成してraxtest構造体内の配列の末尾に追加
+					*rootRaxSpec.StepCategories[init.Name].Steps = append(*rootRaxSpec.StepCategories[init.Name].Steps, stepRaxSpec{
+						// 名前
+						Name: step_name,
+						// メソッド名
+						Method: method_item.method,
+						// パス
+						Path: pathSpec.path,
+						// クエリパラメータ
+						Query: step_name,
+						// 予期しているステータスコード
+						ExpectStatus: expect_status,
+					})
+
+					// クエリとボディが両方ない場合
+				} else {
+
+					// ステップ構造体を生成してraxtest構造体内の配列の末尾に追加
+					*rootRaxSpec.StepCategories[init.Name].Steps = append(*rootRaxSpec.StepCategories[init.Name].Steps, stepRaxSpec{
+						// 名前
+						Name: step_name,
+						// メソッド名
+						Method: method_item.method,
+						// パス
+						Path: pathSpec.path,
+						// 予期しているステータスコード
+						ExpectStatus: expect_status,
+					})
+				}
+			}
+
+		}
+
+	}
+
+	// 最後に、initステップからNameがno_loginのステップを削除
+	for i, init := range rootRaxSpec.Init {
+		if init.Name == "no_login" {
+			rootRaxSpec.Init = append(rootRaxSpec.Init[:i], rootRaxSpec.Init[i+1:]...)
+		}
 	}
 
 	return &rootRaxSpec, &dataRaxSpecs, nil
