@@ -171,7 +171,7 @@ func genItem(inputFileName string) (*[]pathSpec, *[]pathSpec, *[]pathSpec, error
 }
 
 // openapi構造体よりraxtestのデータ構造体を生成する関数
-func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec, loginSpecs *[]pathSpec) (*rootRaxSpec, *map[string]dataRaxSpec, error) {
+func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec, loginSpecs *[]pathSpec) (*rootRaxSpec, *map[string][]dataRaxSpec, error) {
 
 	// 使う構造体を定義。処理後は返り値として返す
 	rootRaxSpec := rootRaxSpec{
@@ -182,7 +182,7 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 	}
 
 	// JSONになるデータ構造体の連想配列を定義
-	dataRaxSpecs := make(map[string]dataRaxSpec)
+	dataRaxSpecs := make(map[string]([]dataRaxSpec))
 
 	rootRaxSpec.Init = append(rootRaxSpec.Init, stepRaxSpec{
 		Name: "no_login",
@@ -198,11 +198,14 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 			// ステップ名を生成
 			step_name := loginSpec.name + "_" + method_item.method
 
+			// 一つ目の要素を初期化
+			dataRaxSpecs[step_name] = make([]dataRaxSpec, 1)
+
 			// クエリとボディが両方ある場合
 			if method_item.bodies != nil && method_item.queries != nil {
 
 				// データ構造体の連想配列にステップ名をキーにしてクエリとボディのデータを格納
-				dataRaxSpecs[step_name] = dataRaxSpec{
+				dataRaxSpecs[step_name][0] = dataRaxSpec{
 					Bodies:  genJson(&method_item.bodies),
 					Queries: genJson(&method_item.queries),
 				}
@@ -225,7 +228,7 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 			} else if method_item.bodies != nil {
 
 				// データ構造体の連想配列にステップ名をキーにしてボディのデータを格納
-				dataRaxSpecs[step_name] = dataRaxSpec{
+				dataRaxSpecs[step_name][0] = dataRaxSpec{
 					Bodies: genJson(&method_item.bodies),
 				}
 
@@ -245,7 +248,7 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 			} else if method_item.queries != nil {
 
 				// データ構造体の連想配列にステップ名をキーにしてクエリのデータを格納
-				dataRaxSpecs[step_name] = dataRaxSpec{
+				dataRaxSpecs[step_name][0] = dataRaxSpec{
 					Queries: genJson(&method_item.queries),
 				}
 
@@ -301,6 +304,9 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 				// ステップ名を生成
 				step_name := pathSpec.name + "_" + method_item.method
 
+				// 一つ目の要素を初期化
+				dataRaxSpecs[step_name] = make([]dataRaxSpec, 1)
+
 				var expect_status int
 				if login_name == "" {
 					expect_status = 401
@@ -312,7 +318,7 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 				if method_item.bodies != nil && method_item.queries != nil {
 
 					// データ構造体の連想配列にステップ名をキーにしてクエリとボディのデータを格納
-					dataRaxSpecs[step_name] = dataRaxSpec{
+					dataRaxSpecs[step_name][0] = dataRaxSpec{
 						Bodies:  genJson(&method_item.bodies),
 						Queries: genJson(&method_item.queries),
 					}
@@ -337,7 +343,7 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 				} else if method_item.bodies != nil {
 
 					// データ構造体の連想配列にステップ名をキーにしてボディのデータを格納
-					dataRaxSpecs[step_name] = dataRaxSpec{
+					dataRaxSpecs[step_name][0] = dataRaxSpec{
 						Bodies: genJson(&method_item.bodies),
 					}
 
@@ -359,7 +365,7 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 				} else if method_item.queries != nil {
 
 					// データ構造体の連想配列にステップ名をキーにしてクエリのデータを格納
-					dataRaxSpecs[step_name] = dataRaxSpec{
+					dataRaxSpecs[step_name][0] = dataRaxSpec{
 						Queries: genJson(&method_item.queries),
 					}
 
@@ -409,7 +415,7 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 }
 
 // raxtest構造体を受け取って、JSONに変換して指定されたパスに出力する関数
-func renderRaxTestStruct(output_path *string, json_path *string, rootRaxSpec *rootRaxSpec, dataRaxSpecs *map[string]dataRaxSpec) error {
+func renderRaxTestStruct(output_path *string, json_path *string, rootRaxSpec *rootRaxSpec, dataRaxSpecs *map[string][]dataRaxSpec) error {
 
 	// データをJSONに変換
 	json, err := json.MarshalIndent(dataRaxSpecs, "", "  ")
