@@ -39,18 +39,24 @@ type categoryRaxSpec struct {
 
 // ステップを格納する構造体を定義
 type stepRaxSpec struct {
-	Name         string `yaml:"name"`
-	Path         string `yaml:"path"`
-	Method       string `yaml:"method"`
-	Query        string `yaml:"query,omitempty"`
-	Body         string `yaml:"body,omitempty"`
-	ExpectStatus int    `yaml:"expect_status,omitempty"`
+	Name    string        `yaml:"name"`
+	Path    string        `yaml:"path"`
+	Method  string        `yaml:"method"`
+	RefData string        `yaml:"ref_data,omitempty"`
+	Option  optionRaxSpec `yaml:"option,omitempty"`
+}
+
+// オプションを格納する構造体を定義
+type optionRaxSpec struct {
+	Query bool `yaml:"query,omitempty"`
+	Body  bool `yaml:"body,omitempty"`
 }
 
 // 以下はraxtestで参照するjsonの構造を表す構造体である
 
 // データの構造体を定義
 type dataRaxSpec struct {
-	Bodies  map[string]any `json:"body,omitempty"`
-	Queries map[string]any `json:"query,omitempty"`
+	Bodies       map[string]any `json:"body,omitempty"`
+	Queries      map[string]any `json:"query,omitempty"`
+	ExpectStatus int            `json:"expect_status,omitempty"`
 }
