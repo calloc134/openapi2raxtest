@@ -42,14 +42,14 @@ type stepRaxSpec struct {
 	Name    string        `yaml:"name"`
 	Path    string        `yaml:"path"`
 	Method  string        `yaml:"method"`
-	RefData string        `yaml:"ref_data,omitempty"`
-	Option  optionRaxSpec `yaml:"option,omitempty"`
+	RefData string        `yaml:"ref_data"`
+	Option  optionRaxSpec `yaml:"option"`
 }
 
 // オプションを格納する構造体を定義
 type optionRaxSpec struct {
-	Query bool `yaml:"query,omitempty"`
-	Body  bool `yaml:"body,omitempty"`
+	Query bool `yaml:"query"`
+	Body  bool `yaml:"body"`
 }
 
 // 以下はraxtestで参照するjsonの構造を表す構造体である
@@ -58,5 +58,5 @@ type optionRaxSpec struct {
 type dataRaxSpec struct {
 	Bodies       map[string]any `json:"body,omitempty"`
 	Queries      map[string]any `json:"query,omitempty"`
-	ExpectStatus int            `json:"expect_status,omitempty"`
+	ExpectStatus int            `json:"expect_status"`
 }

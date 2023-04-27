@@ -197,7 +197,10 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 		for _, method_item := range loginSpec.methods {
 
 			// ステップ名を生成
-			step_name := loginSpec.name + "_" + method_item.method
+			step_name := loginSpec.name + "(" + method_item.method + ")"
+
+			//
+			ref_data_name := step_name
 
 			// オプション構造体を定義
 			option := optionRaxSpec{
@@ -248,7 +251,7 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 				Name:    step_name,
 				Method:  method_item.method,
 				Path:    loginSpec.path,
-				RefData: step_name,
+				RefData: ref_data_name,
 				Option:  option,
 			})
 		}
@@ -279,7 +282,7 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 			// メソッド毎に処理
 			for _, method_item := range pathSpec.methods {
 				// ステップ名を生成
-				step_name := pathSpec.name + "_" + method_item.method
+				step_name := pathSpec.name + "(" + method_item.method + ")"
 
 				// オプション構造体を定義
 				option := optionRaxSpec{
@@ -296,7 +299,7 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 				}
 
 				// データの参照に用いる名前を定義
-				ref_data_name := step_name + "-in-" + init.Name
+				ref_data_name := init.Name + "/" + step_name
 
 				// クエリとボディが両方ある場合
 				if method_item.bodies != nil && method_item.queries != nil {
@@ -338,6 +341,7 @@ func genRaxtestStruct(base_url *string, data_path *string, pathSpecs *[]pathSpec
 
 					// クエリとボディが両方ない場合はステータスのみ格納
 				} else {
+
 					// データ構造体の連想配列にステップ名をキーにしてステータスのみのデータを格納
 					dataRaxSpecs[ref_data_name] = append(dataRaxSpecs[ref_data_name], dataRaxSpec{
 						ExpectStatus: expect_status,
